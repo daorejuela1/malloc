@@ -35,27 +35,16 @@ void *expand(size_t size)
 		return (NULL);
 	if (heap.heap_start == NULL)
 	{
-		/* Calling expand() for the first time */
 		heap.heap_start = p;
-		/* Set the first chunk, returned to USER */
 		add_header(p, size, 0);
-		/* Set middle and sentinel chunks */
 		add_header(p + GET_SIZE(p), pg_sz - size - 3 * HDR_SZ, 0);
 		add_header(p + pg_sz - HDR_SZ, 0, pg_sz - size - 2 * HDR_SZ);
 		return (p);
 	}
 	else
 	{
-		/*
-		 * Subsequent calls to expand()
-		 * Make p point to sentinel chunk (block) and convert
-		 * that sentinel to regular chunk, which will be returned to
-		 * a user
-		 */
 		p -= HDR_SZ;
 		tmp = p;
-		/* Change previous sentinel chunk, returned to USER */
-		/* FIXME: cause GET_PREV is not 0, size is size+1*/
 		add_header(p, size, GET_PREV(p));
 		p += GET_SIZE(p);
 		add_header(p, pg_sz - size - 2 * HDR_SZ, 0);
@@ -85,14 +74,12 @@ void *find_block(size_t size)
 			tmp = p - GET_PREV(p);
 			if (GET_SIZE(tmp) >= req_sz + HDR_SZ + MIN_SIZE)
 			{
-				/* Split the chunk */
 				add_header(tmp + req_sz, GET_SIZE(tmp) - req_sz - HDR_SZ, 0);
 				((block_info *)tmp)->size = req_sz;
 				((block_info *)p)->prev = GET_SIZE(tmp + req_sz);
 			}
 			else
 			{
-				/* Don't split the chunk */
 				((block_info *)p)->size &= LSB_ZERO_MASK;
 				((block_info *)p)->prev = 0;
 			}

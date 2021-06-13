@@ -6,7 +6,6 @@
  * @chunk: pointer to the start of the chunk
  * @unused: number of unused allocated bytes
  * Return: If memory allocation fails, return NULL.
- * Otherwise, return a pointer to the start of the allocated memory region.
  */
 static void *_sbrk_apply(size_t size, void *chunk, size_t unused)
 {
@@ -27,8 +26,7 @@ static void *_sbrk_apply(size_t size, void *chunk, size_t unused)
 /**
  * naive_malloc - naive malloc that is presented in the concept page
  * @size: size needed to be allocated for the user
- * Return: return a pointer to the allocated memory that is suitably
- * aligned for any kind of variable
+ * Return: return a pointer to the allocated memory
  */
 void *naive_malloc(size_t size)
 {
