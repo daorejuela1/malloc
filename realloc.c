@@ -2,8 +2,7 @@
 /**
  *_realloc - array with the range of integer
  *@ptr: array
- *@old_size: old array size
- *@new_size: new array size
+ *@size: new array size
  *Return: int array with min to max
  */
 void *_realloc(void *ptr, size_t size)
